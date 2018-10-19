@@ -14,8 +14,8 @@
   </thead>
   <tbody>
     
-  <ng-container *ngFor="let account of accounts" class="position: relative;">
-    <button (click)="deleteRecord(account)" class="btn-danger" style="position: absolute; right:0; cursor: pointer;">X</button>
+  <ng-container *ngFor="let account of accounts.data" class="position: relative;">
+    <a [href]="deleteLink(account)" (click)="deleteRecord(account)" class="btn-danger btn-lg" style="position: absolute; right:0; cursor: pointer; text-decoration: none">X</a>
       <tr>
           <th scope="row">{{account.name}}</th>
           <td>{{account.debit}} </td>
@@ -41,11 +41,11 @@
   </thead>
   <tbody>
     
-  <ng-container *ngFor="let account of accounts">
+  <ng-container *ngFor="let account of accounts.data">
       <tr>
           <th scope="row"> <input type="text" [(ngModel)]="account.name"></th>
-          <td> <input (change)="accountChanged()" type="text" [(ngModel)]="account.debit"></td>
-          <td> <input (change)="accountChanged()" type="text" [(ngModel)]="account.credit"></td>
+          <td> <input (change)="accountChanged(account)" type="text" [(ngModel)]="account.debit"></td>
+          <td> <input (change)="accountChanged(account)" type="text" [(ngModel)]="account.credit"></td>
       </tr>
   </ng-container>
 

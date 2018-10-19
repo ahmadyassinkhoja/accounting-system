@@ -12,6 +12,7 @@ export class AccountingTableComponent implements OnInit, DoCheck {
   constructor(private accountingSr: AccoutningTableService) { }
 
   accounts
+  once = true
 
   debitSum = 0
   creditSum = 0
@@ -19,25 +20,21 @@ export class AccountingTableComponent implements OnInit, DoCheck {
   editMode = this.accountingSr.editMode
 
   ngOnInit() {
-    this.accounts = this.accountingSr.getAccounts()
-
-    this.accounts.map( (account) => {
-      this.debitSum += account.debit
-      this.creditSum += account.credit
-    })
+    this.accountingSr.getAccounts().subscribe( (data) => {this.accounts = data })
+    
+    // setTimeout(
+    //   this.accounts.data.map( (account) => {
+    //     this.debitSum += account.debit
+    //     this.creditSum += account.credit
+    //   })
+    //   ,2000
+    // )
     
   }
 
-  ngDoCheck(){
-    
-  //   console.log('last account -->', lastAccount)
-  //   // this.accounts.map( (account) => {
-  //   //   if(lastAccount){
-  //   //     this.debitSum += lastAccount.debit
-  //   //     this.creditSum += lastAccount.credit
-  //   //   }
-  //   // })
-  }
+
+
+ 
 
   addRecord() {
     this.accountingSr.addRecord()
@@ -61,11 +58,13 @@ export class AccountingTableComponent implements OnInit, DoCheck {
     this.accountingSr.deleteRecord(account)
   }
 
-  accountChanged() {
+  accountChanged(account) {
     this.debitSum = 0
     this.creditSum = 0
 
-    this.accounts.map( (account) => {
+    this.accountingSr.accountChanged(account)
+
+    this.accounts.data.map( (account) => {
       console.log(this.debitSum)
       this.debitSum += parseInt(account.debit)
       this.creditSum += parseInt(account.credit)
@@ -73,6 +72,31 @@ export class AccountingTableComponent implements OnInit, DoCheck {
 
   }
 
-  
+  deleteLink(account){
+    return `http://localhost:3000/account/${account.id}`
+  }
+
+  ngDoCheck(){
+
+    if(this.once == true){
+      setTimeout(
+        this.accounts.data.map( (account) => {
+          this.debitSum += account.debit
+          this.creditSum += account.credit
+        })
+        ,2000
+      )
+    }
+    this.once = false
+
+    
+    //   console.log('last account -->', lastAccount)
+    //   // this.accounts.map( (account) => {
+    //   //   if(lastAccount){
+    //   //     this.debitSum += lastAccount.debit
+    //   //     this.creditSum += lastAccount.credit
+    //   //   }
+    //   // })
+    }
 
 }

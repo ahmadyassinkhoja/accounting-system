@@ -3,18 +3,23 @@ const bodyParser = require('body-parser');
 const app = express()
 const PORT= 3000
 
-accounts = [
+let ids = 3;
+
+const accounts = [
     {
+      id: 0,
       name:'Cash',
       debit: 10000,
       credit: 0
     },
     {
+      id:1,
       name:'Account Recievable',
       debit: 2000,
       credit: 0
     },
     {
+      id:2,
       name:'Prepaid building rent',
       debit: 0,
       credit: 12000
@@ -41,6 +46,44 @@ accounts = [
 
 app.get('/accounts', (req,res) => {
     res.send({data: accounts})
+})
+
+app.post('/addAccount', (req,res) => {
+    console.log(req.body)
+    res.setHeader("Content-Type", "text/html")
+    req.body.id = ids++;
+    accounts.push(req.body)
+    // console.log(accounts)
+    res.redirect('http://localhost:4200')
+})
+
+app.put('/editAccount/:id', (req,res) => {
+    console.log(req.body)
+    let account = req.body
+    let selectedAccount = accounts.find( (_account) => _account.id == account.id)
+    if(selectedAccount){
+        selectedAccount.credit = parseInt(account.credit)
+        selectedAccount.debit = parseInt(account.debit)
+    }
+})
+
+
+app.all('/account/:id', (req,res) => {
+    console.log('test delete-->',req.url)
+    let url = req.url
+    let urlSplit = url.split('/')
+    let id = urlSplit[2]
+    console.log('id-->',id)
+
+    let account = accounts.find( (account) => account.id == id)
+    let index = account.id
+    console.log(index)
+
+    console.log(accounts)
+   
+    accounts.splice(index , 1)
+
+   res.redirect('http://localhost:4200')
 })
 
 
