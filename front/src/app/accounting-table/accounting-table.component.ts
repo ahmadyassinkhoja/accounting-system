@@ -44,10 +44,10 @@ export class AccountingTableComponent implements OnInit, DoCheck {
   }
 
   editToggle() {
-    let lastAccount = this.accounts.slice(-1)
+    // let lastAccount = this.accounts.slice(-1)
     this.editMode = !this.editMode
-    this.debitSum += parseInt(lastAccount[0].debit) 
-    this.creditSum += parseInt(lastAccount[0].credit)
+    // this.debitSum += parseInt(lastAccount[0].debit) 
+    // this.creditSum += parseInt(lastAccount[0].credit)
   }
 
   deleteRecord(account) {
@@ -59,6 +59,18 @@ export class AccountingTableComponent implements OnInit, DoCheck {
       this.creditSum -= parseInt(account.credit) 
     }
     this.accountingSr.deleteRecord(account)
+  }
+
+  accountChanged() {
+    this.debitSum = 0
+    this.creditSum = 0
+
+    this.accounts.map( (account) => {
+      console.log(this.debitSum)
+      this.debitSum += parseInt(account.debit)
+      this.creditSum += parseInt(account.credit)
+    })
+
   }
 
   

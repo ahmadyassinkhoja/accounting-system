@@ -44,8 +44,8 @@
   <ng-container *ngFor="let account of accounts">
       <tr>
           <th scope="row"> <input type="text" [(ngModel)]="account.name"></th>
-          <td> <input type="text" [(ngModel)]="account.debit"></td>
-          <td> <input type="text" [(ngModel)]="account.credit"></td>
+          <td> <input (change)="accountChanged()" type="text" [(ngModel)]="account.debit"></td>
+          <td> <input (change)="accountChanged()" type="text" [(ngModel)]="account.credit"></td>
       </tr>
   </ng-container>
 
